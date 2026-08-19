@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: foja
+      POSTGRES_PASSWORD: foja_dev_password
+      POSTGRES_DB: foja
+    ports:
+      - '5432:5432'
+    volumes:
+      - foja_pg_data:/var/lib/postgresql/data
+
+volumes:
+  foja_pg_data:
