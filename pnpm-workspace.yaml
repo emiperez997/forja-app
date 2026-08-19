@@ -1,2 +1,10 @@
 packages:
-  - "apps/*"
+  - apps/*
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - bcrypt
+  - esbuild
+  - lmdb
+  - msgpackr-extract
+  - unrs-resolver
