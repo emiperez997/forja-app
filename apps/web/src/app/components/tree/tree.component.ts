@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TreeNode } from '../../core/models/node.model';
-import { NodesService } from '../../core/nodes.service';
+import { SelectionService } from '../../core/selection.service';
 
 @Component({
   selector: 'app-tree',
@@ -13,6 +13,7 @@ import { NodesService } from '../../core/nodes.service';
         <li>
           <div
             class="flex items-center gap-1 py-1 px-2 rounded hover:bg-border cursor-pointer text-sm"
+            [class.bg-border]="selectionService.selectedNode()?.id === node.id"
             (click)="onNodeClick(node)"
           >
             <span>{{ node.type === 'folder' ? '📁' : '📝' }}</span>
@@ -29,12 +30,11 @@ import { NodesService } from '../../core/nodes.service';
 export class TreeComponent {
   @Input() nodes: TreeNode[] = [];
 
-  constructor(private nodesService: NodesService) {}
+  constructor(public selectionService: SelectionService) {}
 
   onNodeClick(node: TreeNode) {
     if (node.type === 'note') {
-      // acá disparás la selección de la nota para mostrarla en el editor
-      // (podés usar un signal compartido en un servicio, o un output/router)
+      this.selectionService.select(node);
     }
   }
 }

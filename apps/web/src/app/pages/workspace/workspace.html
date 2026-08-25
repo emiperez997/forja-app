@@ -1,0 +1,51 @@
+<div class="flex h-screen bg-cream">
+  <!-- Sidebar -->
+  <aside class="w-64 border-r border-border flex flex-col">
+    <div class="p-4 border-b border-border flex items-center justify-between">
+      <h1 class="font-serif text-lg text-ink">Forja</h1>
+      <button
+        (click)="authService.logout()"
+        class="text-xs text-ink/50 hover:text-terracotta transition"
+      >
+        Salir
+      </button>
+    </div>
+
+    <div class="p-2 flex gap-2">
+      <button
+        (click)="createRootFolder()"
+        class="flex-1 text-xs py-1.5 rounded-md border border-border hover:bg-border/50 transition"
+      >
+        + Carpeta
+      </button>
+      <button
+        (click)="createRootNote()"
+        class="flex-1 text-xs py-1.5 rounded-md bg-terracotta text-white hover:opacity-90 transition"
+      >
+        + Nota
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-2">
+      <app-tree [nodes]="nodesService.tree()" />
+    </div>
+  </aside>
+
+  <!-- Editor -->
+  <main class="flex-1 overflow-y-auto">
+    @if (selectionService.selectedNode(); as node) {
+    <div class="max-w-2xl mx-auto px-8 py-10">
+      <input
+        [value]="node.title"
+        (blur)="nodesService.rename(node.id, $any($event.target).value)"
+        class="w-full text-3xl font-serif text-ink mb-6 border-none outline-none bg-transparent"
+      />
+      <app-editor [content]="node.content" (contentChange)="onContentChange($event)" />
+    </div>
+    } @else {
+    <div class="h-full flex items-center justify-center text-ink/40">
+      <p>Seleccioná o creá una nota para empezar a escribir</p>
+    </div>
+    }
+  </main>
+</div>
