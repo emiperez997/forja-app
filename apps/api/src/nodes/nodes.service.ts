@@ -1,10 +1,5 @@
-import {
-  Inject,
-  Injectable,
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
-import { and, eq, isNull } from 'drizzle-orm';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { and, eq } from 'drizzle-orm';
 import { DB_PROVIDER, type DrizzleDB } from '../db/db. module';
 import { nodes } from '../db/schema';
 import { CreateNodeDto } from './dto/create-node.dto';
@@ -37,7 +32,7 @@ export class NodesService {
         type: dto.type,
         title: dto.title,
         parentId: dto.parentId ?? null,
-        content: dto.type === 'note' ? {} : null,
+        content: dto.type === 'note' ? null : null,
       })
       .returning();
     return node;
