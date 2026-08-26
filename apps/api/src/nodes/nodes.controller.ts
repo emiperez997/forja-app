@@ -57,16 +57,16 @@ export class NodesController {
     return this.nodesService.update(user.userId, id, dto);
   }
 
-  @Delete('permanent/:id')
+  @Delete(':id')
+  remove(@CurrentUser() user: { userId: string }, @Param('id') id: string) {
+    return this.nodesService.remove(user.userId, id);
+  }
+
+  @Delete(':id/permanent')
   removePermanent(
     @CurrentUser() user: { userId: string },
     @Param('id') id: string,
   ) {
     return this.nodesService.removePermanent(user.userId, id);
-  }
-
-  @Delete(':id')
-  remove(@CurrentUser() user: { userId: string }, @Param('id') id: string) {
-    return this.nodesService.remove(user.userId, id);
   }
 }

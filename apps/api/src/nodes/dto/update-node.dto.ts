@@ -1,4 +1,10 @@
-import { IsOptional, IsString, IsUUID, IsInt } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsUUID,
+  IsInt,
+  ValidateIf,
+} from 'class-validator';
 
 export class UpdateNodeDto {
   @IsOptional()
@@ -6,11 +12,12 @@ export class UpdateNodeDto {
   title?: string;
 
   @IsOptional()
-  content?: unknown; // JSON de Tiptap
+  content?: unknown;
 
+  @ValidateIf((_, value) => value !== null)
   @IsOptional()
   @IsUUID()
-  parentId?: string;
+  parentId?: string | null;
 
   @IsOptional()
   @IsInt()
