@@ -25,6 +25,11 @@ export class NodesController {
     return this.nodesService.findAll(user.userId);
   }
 
+  @Get('trash/list')
+  findTrash(@CurrentUser() user: { userId: string }) {
+    return this.nodesService.findTrash(user.userId);
+  }
+
   @Get(':id')
   findOne(
     @CurrentUser() user: { userId: string },
@@ -38,6 +43,11 @@ export class NodesController {
     return this.nodesService.create(user.userId, dto);
   }
 
+  @Post(':id/restore')
+  restore(@CurrentUser() user: { userId: string }, @Param('id') id: string) {
+    return this.nodesService.restore(user.userId, id);
+  }
+
   @Patch(':id')
   update(
     @CurrentUser() user: { userId: string },
@@ -45,6 +55,14 @@ export class NodesController {
     @Body() dto: UpdateNodeDto,
   ) {
     return this.nodesService.update(user.userId, id, dto);
+  }
+
+  @Delete('permanent/:id')
+  removePermanent(
+    @CurrentUser() user: { userId: string },
+    @Param('id') id: string,
+  ) {
+    return this.nodesService.removePermanent(user.userId, id);
   }
 
   @Delete(':id')

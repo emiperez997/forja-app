@@ -4,14 +4,25 @@ import { DB_PROVIDER, type DrizzleDB } from '../db/db. module';
 import { nodes } from '../db/schema';
 import { CreateNodeDto } from './dto/create-node.dto';
 import { UpdateNodeDto } from './dto/update-node.dto';
+import { isNull } from 'drizzle-orm';
+import { isNotNull } from 'drizzle-orm';
 
 @Injectable()
 export class NodesService {
   constructor(@Inject(DB_PROVIDER) private db: DrizzleDB) {}
 
   async findAll(userId: string) {
-    // Trae TODOS los nodos planos del usuario; el árbol se arma en el frontend
-    return this.db.select().from(nodes).where(eq(nodes.userId, userId));
+    return this.db
+      .select()
+      .from(nodes)
+      .where(and(eq(nodes.userId, userId), isNull(nodes.deletedAt)));
+  }
+
+  async findTrash(userId: string) {
+    return this.db
+      .select()
+      .from(nodes)
+      .where(and(eq(nodes.userId, userId), isNotNull(nodes.deletedAt)));
   }
 
   async findOne(userId: string, id: string) {
@@ -51,6 +62,26 @@ export class NodesService {
   }
 
   async remove(userId: string, id: string) {
+    await this.findOne(userId, id);
+    const [updated] = await this.db
+      .update(nodes)
+      .set({ deletedAt: new Date() })
+      .where(and(eq(nodes.id, id), eq(nodes.userId, userId)))
+      .returning();
+    return updated;
+  }
+
+  async restore(userId: string, id: string) {
+    await this.findOne(userId, id);
+    const [updated] = await this.db
+      .update(nodes)
+      .set({ deletedAt: null })
+      .where(and(eq(nodes.id, id), eq(nodes.userId, userId)))
+      .returning();
+    return updated;
+  }
+
+  async removePermanent(userId: string, id: string) {
     await this.findOne(userId, id);
     await this.db
       .delete(nodes)
