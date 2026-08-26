@@ -26,7 +26,11 @@
       </button>
     </div>
 
-    <div class="flex-1 overflow-y-auto px-2">
+    <div
+      class="flex-1 overflow-y-auto px-2"
+      (dragover)="$event.preventDefault()"
+      (drop)="onDropToRoot($event)"
+    >
       <app-tree [nodes]="nodesService.tree()" />
     </div>
   </aside>

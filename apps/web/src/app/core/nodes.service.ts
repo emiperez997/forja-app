@@ -68,4 +68,8 @@ export class NodesService {
 
     return roots;
   }
+
+  clear() {
+    this.flatNodes.set([]);
+  }
 }

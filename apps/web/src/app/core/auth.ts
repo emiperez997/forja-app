@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment.development';
+import { NodesService } from './nodes.service';
+import { SelectionService } from './selection.service';
 
 const TOKEN_KEY = 'forja_token';
 
@@ -15,6 +17,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
+    private nodesService: NodesService,
+    private selectionService: SelectionService,
   ) {}
 
   login(email: string, password: string) {
@@ -77,6 +81,8 @@ export class AuthService {
   logout() {
     localStorage.removeItem(TOKEN_KEY);
     this.token.set(null);
+    this.nodesService.clear();
+    this.selectionService.clear();
     this.router.navigate(['/login']);
   }
 
