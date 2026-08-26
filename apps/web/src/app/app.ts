@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ModalComponent } from './components/modal/modal';
-import { ContextMenuComponent } from './components/context-menu/context-menu';
-import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal';
+import { ModalComponent } from './components/modal/modal.component';
+import { ContextMenuComponent } from './components/context-menu/context-menu.component';
+import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-root',

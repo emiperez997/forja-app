@@ -1,41 +1,84 @@
 <div class="flex h-screen bg-cream">
-  <!-- Sidebar -->
   <aside class="w-64 border-r border-border flex flex-col">
     <div class="p-4 border-b border-border flex items-center justify-between">
       <h1 class="font-serif text-lg text-ink">Forja</h1>
-      <button
-        (click)="authService.logout()"
-        class="text-xs text-ink/50 hover:text-terracotta transition"
-      >
-        Salir
-      </button>
+      <div class="flex items-center gap-3">
+        <a
+          routerLink="/trash"
+          class="text-ink/50 hover:text-terracotta transition"
+          title="Papelera"
+        >
+          <lucide-icon [img]="Trash2" class="w-4 h-4" />
+        </a>
+        <button
+          (click)="authService.logout()"
+          class="text-ink/50 hover:text-terracotta transition"
+          title="Salir"
+        >
+          <lucide-icon [img]="LogOut" class="w-4 h-4" />
+        </button>
+      </div>
     </div>
 
     <div class="p-2 flex gap-2">
       <button
         (click)="createRootFolder()"
-        class="flex-1 text-xs py-1.5 rounded-md border border-border hover:bg-border/50 transition"
+        class="flex-1 flex items-center justify-center gap-1.5 text-xs py-1.5 rounded-md border border-border hover:bg-border/50 transition"
       >
-        + Carpeta
+        <lucide-icon [img]="FolderPlus" class="w-3.5 h-3.5" /> Carpeta
       </button>
       <button
         (click)="createRootNote()"
-        class="flex-1 text-xs py-1.5 rounded-md bg-terracotta text-white hover:opacity-90 transition"
+        class="flex-1 flex items-center justify-center gap-1.5 text-xs py-1.5 rounded-md bg-terracotta text-white hover:opacity-90 transition"
       >
-        + Nota
+        <lucide-icon [img]="FilePlus" class="w-3.5 h-3.5" /> Nota
       </button>
     </div>
 
+    <!--
+    <div class="p-2">
+      <div class="relative">
+        <lucide-icon
+          [img]="Search"
+          class="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-ink/40"
+        />
+        <input
+          type="text"
+          placeholder="Buscar..."
+          (input)="nodesService.search($any($event.target).value)"
+          class="w-full text-sm pl-7 pr-2 py-1.5 rounded-md border border-border bg-white focus:outline-none focus:ring-2 focus:ring-terracotta/40"
+        />
+      </div>
+    </div>
+
+    @if (nodesService.searchResults(); as results) {
+    <ul class="px-2">
+      @for (node of results; track node.id) {
+      <li
+        (click)="selectionService.select(node)"
+        class="flex items-center gap-2 text-sm py-1 px-2 rounded hover:bg-border cursor-pointer"
+      >
+        {{ node.title }}
+      </li>
+      }
+    </ul>
+    } @else {
+    }-->
+
     <div
-      class="flex-1 overflow-y-auto px-2"
+      class="flex items-center gap-1.5 text-xs text-ink/40 px-3 py-2 border-b border-border mb-1 rounded hover:bg-border/30 transition"
+      (dragenter)="$event.preventDefault()"
       (dragover)="$event.preventDefault()"
       (drop)="onDropToRoot($event)"
     >
+      <lucide-icon [img]="Home" class="w-3.5 h-3.5" /> Raíz — soltá acá para sacar de una carpeta
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-2">
       <app-tree [nodes]="nodesService.tree()" />
     </div>
   </aside>
 
-  <!-- Editor -->
   <main class="flex-1 overflow-y-auto">
     @if (selectionService.selectedNode(); as node) {
     <div class="max-w-2xl mx-auto px-8 py-10">

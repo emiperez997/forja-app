@@ -15,4 +15,9 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./pages/workspace/workspace').then((m) => m.WorkspaceComponent),
   },
+  {
+    path: 'trash',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/trash/trash').then((m) => m.TrashComponent),
+  },
 ];

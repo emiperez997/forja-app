@@ -20,6 +20,7 @@
     "@tiptap/core": "^3.30.2",
     "@tiptap/extension-image": "^3.30.2",
     "@tiptap/starter-kit": "^3.30.2",
+    "lucide-angular": "^1.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

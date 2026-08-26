@@ -1,14 +1,15 @@
 import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LucideAngularModule, Folder, FileText } from 'lucide-angular';
 import { TreeNode } from '../../core/models/node.model';
 import { SelectionService } from '../../core/selection.service';
-import { ContextMenuService } from '../../core/context-menu';
+import { ContextMenuService } from '../../core/context-menu.service';
 import { NodesService } from '../../core/nodes.service';
 
 @Component({
   selector: 'app-tree',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   template: `
     <ul class="pl-3">
       @for (node of nodes; track node.id) {
@@ -19,12 +20,18 @@ import { NodesService } from '../../core/nodes.service';
           (drop)="onDrop($event, node)"
         >
           <div
-            class="flex items-center gap-1 py-1 px-2 rounded hover:bg-border cursor-pointer text-sm"
+            class="flex items-center gap-2 py-1 px-2 rounded hover:bg-border cursor-pointer text-sm"
             [class.bg-border]="selectionService.selectedNode()?.id === node.id"
             (click)="onNodeClick(node)"
             (contextmenu)="contextMenu.open(node, $event)"
           >
-            <span>{{ node.type === 'folder' ? '📁' : '📝' }}</span>
+            <lucide-icon
+              [img]="node.type === 'folder' ? Folder : FileText"
+              class="w-4 h-4 shrink-0"
+              [class.text-terracotta]="node.type === 'folder'"
+              [class.text-ink]="node.type === 'note'"
+              [class.opacity-60]="node.type === 'note'"
+            />
             <span>{{ node.title }}</span>
           </div>
           @if (node.children.length > 0) {
@@ -38,33 +45,31 @@ import { NodesService } from '../../core/nodes.service';
 export class TreeComponent {
   @Input() nodes: TreeNode[] = [];
 
+  readonly Folder = Folder;
+  readonly FileText = FileText;
+
   selectionService = inject(SelectionService);
   contextMenu = inject(ContextMenuService);
   private nodesService = inject(NodesService);
 
   onNodeClick(node: TreeNode) {
-    if (node.type === 'note') {
-      this.selectionService.select(node);
-    }
+    if (node.type === 'note') this.selectionService.select(node);
   }
 
   onDragStart(event: DragEvent, node: TreeNode) {
+    event.stopPropagation();
     event.dataTransfer?.setData('text/plain', node.id);
   }
 
   onDragOver(event: DragEvent) {
-    event.preventDefault(); // necesario para permitir el drop
+    event.preventDefault();
   }
 
   onDrop(event: DragEvent, target: TreeNode) {
     event.preventDefault();
-    event.stopPropagation(); // evita que el drop también dispare en un <li> padre
+    event.stopPropagation();
     const draggedId = event.dataTransfer?.getData('text/plain');
     if (!draggedId || draggedId === target.id) return;
-
-    // Solo permitimos soltar DENTRO de una carpeta
-    if (target.type === 'folder') {
-      this.nodesService.move(draggedId, target.id);
-    }
+    if (target.type === 'folder') this.nodesService.move(draggedId, target.id);
   }
 }
