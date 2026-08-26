@@ -8,6 +8,7 @@ export class NodesService {
   private flatNodes = signal<NodeItem[]>([]);
 
   tree = computed(() => this.buildTree(this.flatNodes()));
+  trashNodes = signal<NodeItem[]>([]);
 
   constructor(private http: HttpClient) {}
 
@@ -15,6 +16,12 @@ export class NodesService {
     this.http
       .get<NodeItem[]>(`${environment.apiUrl}/api/nodes`)
       .subscribe((nodes) => this.flatNodes.set(nodes));
+  }
+
+  loadTrash() {
+    this.http
+      .get<NodeItem[]>(`${environment.apiUrl}/api/nodes/trash/list`)
+      .subscribe((nodes) => this.trashNodes.set(nodes));
   }
 
   create(type: 'folder' | 'note', title: string, parentId?: string) {
@@ -31,6 +38,13 @@ export class NodesService {
       });
   }
 
+  restore(id: string) {
+    this.http.post<NodeItem>(`${environment.apiUrl}/api/nodes/${id}/restore`, {}).subscribe(() => {
+      this.trashNodes.update((list) => list.filter((n) => n.id !== id));
+      this.load(); // refresca el árbol activo
+    });
+  }
+
   updateContent(id: string, content: unknown) {
     this.http
       .patch<NodeItem>(`${environment.apiUrl}/api/nodes/${id}`, { content })
@@ -40,16 +54,23 @@ export class NodesService {
   }
 
   move(id: string, parentId: string | null) {
-    this.http
-      .patch<NodeItem>(`${environment.apiUrl}/api/nodes/${id}`, { parentId })
-      .subscribe((updated) => {
+    this.http.patch<NodeItem>(`${environment.apiUrl}/api/nodes/${id}`, { parentId }).subscribe({
+      next: (updated) => {
         this.flatNodes.update((list) => list.map((n) => (n.id === id ? updated : n)));
-      });
+      },
+      error: (err) => console.error('Error al mover el nodo:', err),
+    });
   }
 
   remove(id: string) {
     this.http.delete(`${environment.apiUrl}/api/nodes/${id}`).subscribe(() => {
-      this.flatNodes.update((list) => list.filter((n) => n.id !== id && n.parentId !== id));
+      this.flatNodes.update((list) => list.filter((n) => n.id !== id));
+    });
+  }
+
+  removePermanent(id: string) {
+    this.http.delete(`${environment.apiUrl}/api/nodes/${id}/permanent`).subscribe(() => {
+      this.trashNodes.update((list) => list.filter((n) => n.id !== id));
     });
   }
 

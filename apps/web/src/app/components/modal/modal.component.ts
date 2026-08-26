@@ -1,7 +1,7 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ModalService } from '../../core/modal';
+import { ModalService } from '../../core/modal.service';
 
 @Component({
   selector: 'app-modal',
