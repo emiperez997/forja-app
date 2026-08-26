@@ -35,12 +35,11 @@
       </button>
     </div>
 
-    <!--
     <div class="p-2">
       <div class="relative">
         <lucide-icon
           [img]="Search"
-          class="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-ink/40"
+          class="w-3.5 h-3.5 absolute left-1 top-1/2 -translate-y-1/2 text-ink/40"
         />
         <input
           type="text"
@@ -63,7 +62,6 @@
       }
     </ul>
     } @else {
-    }-->
 
     <div
       class="flex items-center gap-1.5 text-xs text-ink/40 px-3 py-2 border-b border-border mb-1 rounded hover:bg-border/30 transition"
@@ -77,6 +75,7 @@
     <div class="flex-1 overflow-y-auto px-2">
       <app-tree [nodes]="nodesService.tree()" />
     </div>
+    }
   </aside>
 
   <main class="flex-1 overflow-y-auto">

@@ -7,6 +7,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -28,6 +29,12 @@ export class NodesController {
   @Get('trash/list')
   findTrash(@CurrentUser() user: { userId: string }) {
     return this.nodesService.findTrash(user.userId);
+  }
+
+  @Get('search/query')
+  search(@CurrentUser() user: { userId: string }, @Query('q') q: string) {
+    if (!q?.trim()) return [];
+    return this.nodesService.search(user.userId, q);
   }
 
   @Get(':id')

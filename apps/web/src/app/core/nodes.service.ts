@@ -10,6 +10,8 @@ export class NodesService {
   tree = computed(() => this.buildTree(this.flatNodes()));
   trashNodes = signal<NodeItem[]>([]);
 
+  searchResults = signal<NodeItem[] | null>(null);
+
   constructor(private http: HttpClient) {}
 
   load() {
@@ -22,6 +24,16 @@ export class NodesService {
     this.http
       .get<NodeItem[]>(`${environment.apiUrl}/api/nodes/trash/list`)
       .subscribe((nodes) => this.trashNodes.set(nodes));
+  }
+
+  search(query: string) {
+    if (!query.trim()) {
+      this.searchResults.set(null);
+      return;
+    }
+    this.http
+      .get<NodeItem[]>(`${environment.apiUrl}/api/nodes/search/query`, { params: { q: query } })
+      .subscribe((results) => this.searchResults.set(results));
   }
 
   create(type: 'folder' | 'note', title: string, parentId?: string) {

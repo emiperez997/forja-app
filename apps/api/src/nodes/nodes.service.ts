@@ -1,11 +1,10 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { and, eq } from 'drizzle-orm';
 import { DB_PROVIDER, type DrizzleDB } from '../db/db. module';
 import { nodes } from '../db/schema';
 import { CreateNodeDto } from './dto/create-node.dto';
 import { UpdateNodeDto } from './dto/update-node.dto';
-import { isNull } from 'drizzle-orm';
-import { isNotNull } from 'drizzle-orm';
+
+import { isNull, isNotNull, and, eq, ilike } from 'drizzle-orm';
 
 @Injectable()
 export class NodesService {
@@ -33,6 +32,19 @@ export class NodesService {
 
     if (!node) throw new NotFoundException('Nodo no encontrado');
     return node;
+  }
+
+  async search(userId: string, query: string) {
+    return this.db
+      .select()
+      .from(nodes)
+      .where(
+        and(
+          eq(nodes.userId, userId),
+          isNull(nodes.deletedAt),
+          ilike(nodes.title, `%${query}%`),
+        ),
+      );
   }
 
   async create(userId: string, dto: CreateNodeDto) {
