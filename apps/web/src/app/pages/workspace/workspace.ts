@@ -55,4 +55,10 @@ export class WorkspaceComponent implements OnInit {
       onConfirm: (title) => this.nodesService.create('note', title),
     });
   }
+
+  onDropToRoot(event: DragEvent) {
+    event.preventDefault();
+    const draggedId = event.dataTransfer?.getData('text/plain');
+    if (draggedId) this.nodesService.move(draggedId, null);
+  }
 }
