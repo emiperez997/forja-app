@@ -6,6 +6,7 @@ import { AuthService } from '../../core/auth';
 import { TreeComponent } from '../../components/tree/tree.component';
 import { EditorComponent } from '../../components/editor/editor.component';
 import { Subject, debounceTime } from 'rxjs';
+import { ModalService } from '../../core/modal';
 
 @Component({
   selector: 'app-workspace',
@@ -20,6 +21,7 @@ export class WorkspaceComponent implements OnInit {
     public nodesService: NodesService,
     public selectionService: SelectionService,
     public authService: AuthService,
+    private modalService: ModalService,
   ) {
     // autoguardado con debounce de 800ms
     this.contentChange$.pipe(debounceTime(800)).subscribe((content) => {
@@ -37,12 +39,20 @@ export class WorkspaceComponent implements OnInit {
   }
 
   createRootFolder() {
-    const title = prompt('Nombre de la carpeta:');
-    if (title) this.nodesService.create('folder', title);
+    this.modalService.open({
+      title: 'Nueva carpeta',
+      placeholder: 'Nombre de la carpeta',
+      confirmLabel: 'Crear',
+      onConfirm: (title) => this.nodesService.create('folder', title),
+    });
   }
 
   createRootNote() {
-    const title = prompt('Título de la nota:');
-    if (title) this.nodesService.create('note', title);
+    this.modalService.open({
+      title: 'Nueva nota',
+      placeholder: 'Título de la nota',
+      confirmLabel: 'Crear',
+      onConfirm: (title) => this.nodesService.create('note', title),
+    });
   }
 }
