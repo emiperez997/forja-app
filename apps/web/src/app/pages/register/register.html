@@ -1,0 +1,63 @@
+<div class="min-h-screen flex items-center justify-center bg-cream px-4">
+  <div class="w-full max-w-sm">
+    <h1 class="font-serif text-3xl text-ink mb-1 text-center">Forja</h1>
+    <p class="text-sm text-ink/60 mb-8 text-center">Creá tu cuenta para empezar</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div>
+        <label class="block text-sm text-ink/80 mb-1">Nombre (opcional)</label>
+        <input
+          type="text"
+          formControlName="name"
+          class="w-full px-3 py-2 rounded-md border border-border bg-white text-ink focus:outline-none focus:ring-2 focus:ring-terracotta/40"
+          placeholder="Emi"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm text-ink/80 mb-1">Email</label>
+        <input
+          type="email"
+          formControlName="email"
+          class="w-full px-3 py-2 rounded-md border border-border bg-white text-ink focus:outline-none focus:ring-2 focus:ring-terracotta/40"
+          placeholder="example@mail.com"
+        />
+        @if (form.get('email')?.touched && form.get('email')?.invalid) {
+        <p class="text-xs text-red-600 mt-1">Ingresá un email válido</p>
+        }
+      </div>
+
+      <div>
+        <label class="block text-sm text-ink/80 mb-1">Contraseña</label>
+        <input
+          type="password"
+          formControlName="password"
+          class="w-full px-3 py-2 rounded-md border border-border bg-white text-ink focus:outline-none focus:ring-2 focus:ring-terracotta/40"
+          placeholder="••••••••"
+        />
+        @if (form.get('password')?.touched && form.get('password')?.invalid) {
+        <p class="text-xs text-red-600 mt-1">Mínimo 6 caracteres</p>
+        }
+      </div>
+
+      @if (authService.errorMessage()) {
+      <p class="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+        {{ authService.errorMessage() }}
+      </p>
+      }
+
+      <button
+        type="submit"
+        [disabled]="form.invalid || authService.loading()"
+        class="w-full py-2 rounded-md bg-terracotta text-white font-medium hover:opacity-90 transition disabled:opacity-50"
+      >
+        {{ authService.loading() ? 'Creando cuenta...' : 'Crear cuenta' }}
+      </button>
+    </form>
+
+    <p class="text-sm text-ink/60 text-center mt-6">
+      ¿Ya tenés cuenta?
+      <a routerLink="/login" class="text-terracotta hover:underline">Ingresá</a>
+    </p>
+  </div>
+</div>
