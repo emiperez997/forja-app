@@ -1,6 +1,7 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NodeItem, TreeNode } from './models/node.model';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class NodesService {
@@ -11,35 +12,43 @@ export class NodesService {
   constructor(private http: HttpClient) {}
 
   load() {
-    this.http.get<NodeItem[]>('/api/nodes').subscribe((nodes) => this.flatNodes.set(nodes));
+    this.http
+      .get<NodeItem[]>(`${environment.apiUrl}/api/nodes`)
+      .subscribe((nodes) => this.flatNodes.set(nodes));
   }
 
   create(type: 'folder' | 'note', title: string, parentId?: string) {
     return this.http
-      .post<NodeItem>('/api/nodes', { type, title, parentId })
+      .post<NodeItem>(`${environment.apiUrl}/api/nodes`, { type, title, parentId })
       .subscribe((node) => this.flatNodes.update((list) => [...list, node]));
   }
 
   rename(id: string, title: string) {
-    this.http.patch<NodeItem>(`/api/nodes/${id}`, { title }).subscribe((updated) => {
-      this.flatNodes.update((list) => list.map((n) => (n.id === id ? updated : n)));
-    });
+    this.http
+      .patch<NodeItem>(`${environment.apiUrl}/api/nodes/${id}`, { title })
+      .subscribe((updated) => {
+        this.flatNodes.update((list) => list.map((n) => (n.id === id ? updated : n)));
+      });
   }
 
   updateContent(id: string, content: unknown) {
-    this.http.patch<NodeItem>(`/api/nodes/${id}`, { content }).subscribe((updated) => {
-      this.flatNodes.update((list) => list.map((n) => (n.id === id ? updated : n)));
-    });
+    this.http
+      .patch<NodeItem>(`${environment.apiUrl}/api/nodes/${id}`, { content })
+      .subscribe((updated) => {
+        this.flatNodes.update((list) => list.map((n) => (n.id === id ? updated : n)));
+      });
   }
 
   move(id: string, parentId: string | null) {
-    this.http.patch<NodeItem>(`/api/nodes/${id}`, { parentId }).subscribe((updated) => {
-      this.flatNodes.update((list) => list.map((n) => (n.id === id ? updated : n)));
-    });
+    this.http
+      .patch<NodeItem>(`${environment.apiUrl}/api/nodes/${id}`, { parentId })
+      .subscribe((updated) => {
+        this.flatNodes.update((list) => list.map((n) => (n.id === id ? updated : n)));
+      });
   }
 
   remove(id: string) {
-    this.http.delete(`/api/nodes/${id}`).subscribe(() => {
+    this.http.delete(`${environment.apiUrl}/api/nodes/${id}`).subscribe(() => {
       this.flatNodes.update((list) => list.filter((n) => n.id !== id && n.parentId !== id));
     });
   }

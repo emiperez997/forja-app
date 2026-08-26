@@ -11,7 +11,7 @@ import { Subject, debounceTime } from 'rxjs';
   selector: 'app-workspace',
   standalone: true,
   imports: [CommonModule, TreeComponent, EditorComponent],
-  templateUrl: './workspace.component.html',
+  templateUrl: './workspace.html',
 })
 export class WorkspaceComponent implements OnInit {
   private contentChange$ = new Subject<unknown>();

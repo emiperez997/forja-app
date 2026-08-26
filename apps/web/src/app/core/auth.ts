@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, tap, throwError } from 'rxjs';
+import { environment } from '../../environments/environment.development';
 
 const TOKEN_KEY = 'forja_token';
 
@@ -20,22 +21,24 @@ export class AuthService {
     this.loading.set(true);
     this.errorMessage.set(null);
 
-    return this.http.post<{ accessToken: string }>('/api/auth/login', { email, password }).pipe(
-      tap((res) => {
-        this.setToken(res.accessToken);
-        this.loading.set(false);
-        this.router.navigate(['/']);
-      }),
-      catchError((err) => {
-        this.loading.set(false);
-        this.errorMessage.set(
-          err.status === 401
-            ? 'Email o contraseña incorrectos'
-            : 'Ocurrió un error, intentá de nuevo',
-        );
-        return throwError(() => err);
-      }),
-    );
+    return this.http
+      .post<{ accessToken: string }>(`${environment.apiUrl}/api/auth/login`, { email, password })
+      .pipe(
+        tap((res) => {
+          this.setToken(res.accessToken);
+          this.loading.set(false);
+          this.router.navigate(['/']);
+        }),
+        catchError((err) => {
+          this.loading.set(false);
+          this.errorMessage.set(
+            err.status === 401
+              ? 'Email o contraseña incorrectos'
+              : 'Ocurrió un error, intentá de nuevo',
+          );
+          return throwError(() => err);
+        }),
+      );
   }
 
   register(email: string, password: string, name?: string) {
@@ -43,7 +46,11 @@ export class AuthService {
     this.errorMessage.set(null);
 
     return this.http
-      .post<{ accessToken: string }>('/api/auth/register', { email, password, name })
+      .post<{ accessToken: string }>(`${environment.apiUrl}/api/auth/register`, {
+        email,
+        password,
+        name,
+      })
       .pipe(
         tap((res) => {
           this.setToken(res.accessToken);

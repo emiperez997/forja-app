@@ -30,11 +30,18 @@ export class EditorComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.editor = new Editor({
       element: this.editorContainer.nativeElement,
       extensions: [StarterKit, Image],
-      content: this.content as any,
+      content: this.normalizeContent(this.content),
       onUpdate: ({ editor }) => {
         this.contentChange.emit(editor.getJSON());
       },
     });
+  }
+
+  private normalizeContent(content: unknown) {
+    if (!content || (typeof content === 'object' && Object.keys(content).length === 0)) {
+      return ''; // Tiptap acepta string vacío como documento en blanco
+    }
+    return content as any;
   }
 
   ngOnChanges(changes: SimpleChanges) {
