@@ -8,14 +8,14 @@
           class="text-ink/50 hover:text-terracotta transition"
           title="Papelera"
         >
-          <lucide-icon [img]="Trash2" class="w-4 h-4" />
+          <svg lucideTrash2 class="w-4 h-4"></svg>
         </a>
         <button
           (click)="authService.logout()"
           class="text-ink/50 hover:text-terracotta transition"
           title="Salir"
         >
-          <lucide-icon [img]="LogOut" class="w-4 h-4" />
+          <svg lucideLogOut class="w-4 h-4"></svg>
         </button>
       </div>
     </div>
@@ -25,22 +25,22 @@
         (click)="createRootFolder()"
         class="flex-1 flex items-center justify-center gap-1.5 text-xs py-1.5 rounded-md border border-border hover:bg-border/50 transition"
       >
-        <lucide-icon [img]="FolderPlus" class="w-3.5 h-3.5" /> Carpeta
+        <svg lucideChevronDown class="w-3.5 h-3.5"></svg> Carpeta
       </button>
       <button
         (click)="createRootNote()"
         class="flex-1 flex items-center justify-center gap-1.5 text-xs py-1.5 rounded-md bg-terracotta text-white hover:opacity-90 transition"
       >
-        <lucide-icon [img]="FilePlus" class="w-3.5 h-3.5" /> Nota
+        <svg lucideChevronDown class="w-3.5 h-3.5"></svg> Nota
       </button>
     </div>
 
     <div class="p-2">
       <div class="relative">
-        <lucide-icon
-          [img]="Search"
+        <svg
+          lucideSearch
           class="w-3.5 h-3.5 absolute left-1 top-1/2 -translate-y-1/2 text-ink/40"
-        />
+        ></svg>
         <input
           type="text"
           placeholder="Buscar..."
@@ -69,7 +69,7 @@
       (dragover)="$event.preventDefault()"
       (drop)="onDropToRoot($event)"
     >
-      <lucide-icon [img]="Home" class="w-3.5 h-3.5" /> Raíz — soltá acá para sacar de una carpeta
+      <svg lucideHouse class="w-3.5 h-3.5"></svg>
     </div>
 
     <div class="flex-1 overflow-y-auto px-2">

@@ -2,14 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {
-  LucideAngularModule,
-  Trash2,
-  LogOut,
-  FolderPlus,
-  FilePlus,
-  Search,
-  Home,
-} from 'lucide-angular';
+  LucideTrash2,
+  LucideLogOut,
+  LucideFolderPlus,
+  LucideFilePlus,
+  LucideSearch,
+  LucideHouse,
+} from '@lucide/angular';
 import { NodesService } from '../../core/nodes.service';
 import { SelectionService } from '../../core/selection.service';
 import { AuthService } from '../../core/auth.service';
@@ -21,17 +20,21 @@ import { Subject, debounceTime } from 'rxjs';
 @Component({
   selector: 'app-workspace',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule, TreeComponent, EditorComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    TreeComponent,
+    EditorComponent,
+    LucideTrash2,
+    LucideLogOut,
+    LucideFolderPlus,
+    LucideFilePlus,
+    LucideSearch,
+    LucideHouse,
+  ],
   templateUrl: './workspace.html',
 })
 export class WorkspaceComponent implements OnInit {
-  readonly Trash2 = Trash2;
-  readonly LogOut = LogOut;
-  readonly FolderPlus = FolderPlus;
-  readonly FilePlus = FilePlus;
-  readonly Search = Search;
-  readonly Home = Home;
-
   private contentChange$ = new Subject<unknown>();
 
   constructor(

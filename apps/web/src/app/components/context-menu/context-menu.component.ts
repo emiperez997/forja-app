@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule, FilePlus, FolderPlus, Pencil, Trash2 } from 'lucide-angular';
+import { LucideFilePlus, LucideFolderPlus, LucidePencil, LucideTrash2 } from '@lucide/angular';
 import { ContextMenuService } from '../../core/context-menu.service';
 import { NodesService } from '../../core/nodes.service';
 import { ModalService } from '../../core/modal.service';
@@ -10,7 +10,7 @@ import { SelectionService } from '../../core/selection.service';
 @Component({
   selector: 'app-context-menu',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideFilePlus, LucideFolderPlus, LucidePencil, LucideTrash2],
   template: `
     @if (menu.state(); as state) {
       <div
@@ -28,13 +28,13 @@ import { SelectionService } from '../../core/selection.service';
             (click)="newNoteInside(state)"
             class="w-full flex items-center gap-2 text-left px-3 py-1.5 hover:bg-border/50"
           >
-            <lucide-icon [img]="FilePlus" class="w-3.5 h-3.5" /> Nueva nota adentro
+            <svg lucideFilePlus class="w-3.5 h-3.5"></svg> Nueva nota adentro
           </button>
           <button
             (click)="newFolderInside(state)"
             class="w-full flex items-center gap-2 text-left px-3 py-1.5 hover:bg-border/50"
           >
-            <lucide-icon [img]="FolderPlus" class="w-3.5 h-3.5" /> Nueva carpeta adentro
+            <svg lucideFolderPlus class="w-3.5 h-3.5"></svg> Nueva carpeta adentro
           </button>
           <div class="border-t border-border my-1"></div>
         }
@@ -42,13 +42,13 @@ import { SelectionService } from '../../core/selection.service';
           (click)="rename(state)"
           class="w-full flex items-center gap-2 text-left px-3 py-1.5 hover:bg-border/50"
         >
-          <lucide-icon [img]="Pencil" class="w-3.5 h-3.5" /> Renombrar
+          <svg lucidePencil class="w-3.5 h-3.5"></svg> Renombrar
         </button>
         <button
           (click)="remove(state)"
           class="w-full flex items-center gap-2 text-left px-3 py-1.5 hover:bg-red-50 text-red-600"
         >
-          <lucide-icon [img]="Trash2" class="w-3.5 h-3.5" /> Eliminar
+          <svg lucideTrash2 class="w-3.5 h-3.5"></svg> Eliminar
         </button>
       </div>
     }
@@ -60,11 +60,6 @@ export class ContextMenuComponent {
   private modalService = inject(ModalService);
   private confirmService = inject(ConfirmService);
   private selectionService = inject(SelectionService);
-
-  readonly FilePlus = FilePlus;
-  readonly FolderPlus = FolderPlus;
-  readonly Pencil = Pencil;
-  readonly Trash2 = Trash2;
 
   newNoteInside(state: { node: { id: string } }) {
     this.menu.close();

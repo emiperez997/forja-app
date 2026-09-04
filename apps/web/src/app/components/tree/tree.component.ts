@@ -1,6 +1,6 @@
 import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule, Folder, FileText } from 'lucide-angular';
+import { LucideFolder, LucideFileText } from '@lucide/angular';
 import { TreeNode } from '../../core/models/node.model';
 import { SelectionService } from '../../core/selection.service';
 import { ContextMenuService } from '../../core/context-menu.service';
@@ -9,7 +9,7 @@ import { NodesService } from '../../core/nodes.service';
 @Component({
   selector: 'app-tree',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideFolder, LucideFileText],
   template: `
     <ul class="pl-3">
       @for (node of nodes; track node.id) {
@@ -25,13 +25,13 @@ import { NodesService } from '../../core/nodes.service';
             (click)="onNodeClick(node)"
             (contextmenu)="contextMenu.open(node, $event)"
           >
-            <lucide-icon
-              [img]="node.type === 'folder' ? Folder : FileText"
+            <svg
+              *ngIf="node.type === 'folder'"
               class="w-4 h-4 shrink-0"
               [class.text-terracotta]="node.type === 'folder'"
               [class.text-ink]="node.type === 'note'"
               [class.opacity-60]="node.type === 'note'"
-            />
+            ></svg>
             <span>{{ node.title }}</span>
           </div>
           @if (node.children.length > 0) {
@@ -44,9 +44,6 @@ import { NodesService } from '../../core/nodes.service';
 })
 export class TreeComponent {
   @Input() nodes: TreeNode[] = [];
-
-  readonly Folder = Folder;
-  readonly FileText = FileText;
 
   selectionService = inject(SelectionService);
   contextMenu = inject(ContextMenuService);
