@@ -6,9 +6,16 @@ import { DbModule } from './db/db. module';
 import { AuthModule } from './auth/auth.module';
 import { HealthController } from './health/health.controller';
 import { NodesModule } from './nodes/nodes.module';
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), DbModule, AuthModule, NodesModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    DbModule,
+    AuthModule,
+    NodesModule,
+    UploadsModule,
+  ],
   controllers: [AppController, HealthController],
   providers: [AppService],
 })

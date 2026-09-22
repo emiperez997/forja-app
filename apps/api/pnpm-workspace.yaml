@@ -1,3 +1,4 @@
-ignoredBuiltDependencies:
-  - esbuild
-  - unrs-resolver
+allowBuilds:
+  bcrypt: true
+  esbuild: false
+  unrs-resolver: false
