@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
 
 import { users } from '../db/schema';
-import { DB_PROVIDER, type DrizzleDB } from '../db/db. module';
+import { DB_PROVIDER, type DrizzleDB } from '../db/db.module';
 
 @Injectable()
 export class AuthService {

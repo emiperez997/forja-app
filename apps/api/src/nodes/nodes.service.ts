@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { DB_PROVIDER, type DrizzleDB } from '../db/db. module';
+import { DB_PROVIDER, type DrizzleDB } from '../db/db.module';
 import { nodes } from '../db/schema';
 import { CreateNodeDto } from './dto/create-node.dto';
 import { UpdateNodeDto } from './dto/update-node.dto';
